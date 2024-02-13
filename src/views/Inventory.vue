@@ -169,8 +169,6 @@ const { handleSubmit, setValues,errors, defineField } = useForm({
     validationSchema: yupSchema
 });
 
-
-
 const [assetTag, assetTagAttrs] = defineField('asset_tag');
 const [itemName, itemNameAttrs] = defineField('item_name');
 const [categoryId, categoryIdAttrs] = defineField('category_id');
