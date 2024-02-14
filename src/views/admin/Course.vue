@@ -5,8 +5,7 @@
                 <TitleBar />
             </v-col>
             <v-col cols="auto">
-                <Popup :title="ModalTitle" btnName="Add Courses" @toggleModal="openModal" v-model="isActive"
-                    :width="480">
+                <Popup :title="ModalTitle" btnName="Add Courses" @toggleModal="openModal" v-model="isActive" :width="480">
                     <template #body>
                         <v-form @submit.prevent="onSubmit">
                             <v-row>
@@ -65,7 +64,7 @@
 <script setup>
 import TitleBar from '@/components/TitleBar.vue'
 import Popup from '@/components/Popup.vue'
-import { headerDepartment } from '@/constants/headers'
+import { headerCourse } from '@/constants/headers'
 import { ref, defineAsyncComponent, onMounted, watch } from 'vue'
 import { useForm } from 'vee-validate'
 import { useModal } from '@/composable/useModal'
@@ -75,7 +74,7 @@ import * as yup from 'yup'
 import Swal from 'sweetalert2'
 
 //init
-const headers = ref(headerDepartment)
+const headers = ref(headerCourse)
 const items = ref([]);
 const CourseTable = defineAsyncComponent({
     loader: () => import('@/components/Table.vue')
@@ -193,7 +192,7 @@ watch([isActive, isUpdate], ([active, update]) => {
     if (active && !update) {
         resetForm({
             values: {
-                courseId:0,
+                courseId: 0,
                 description: '',
                 status: '1'
             }

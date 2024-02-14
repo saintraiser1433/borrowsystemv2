@@ -21,6 +21,10 @@ export const item = ref([
         title: "Borrowers",
         path: "/borrower",
       },
+      {
+        title: "For Approval Users",
+        path: "/borrower",
+      },
     ],
   },
   {

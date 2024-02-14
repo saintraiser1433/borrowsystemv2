@@ -5,7 +5,7 @@ export const headerInventory = ref([
     // { title: 'path', align: 'center', key: 'img_path'},
     { title: 'Asset Tag', align: 'start', key: 'asset_tag', sortable: true },
     { title: 'Item Name', align: 'start', key: 'item_name', sortable: true },
-    { title: 'Category', align: 'start', key: 'category_id', sortable: true },
+    { title: 'Category', align: 'start', key: 'categoryName', sortable: true },
     { title: 'Description', align: 'start', key: 'description', sortable: true },
     { title: 'Model', align: 'start', key: 'item_model', sortable: true },
     { title: 'Condition', align: 'start', key: 'item_condition', sortable: true },
@@ -22,6 +22,12 @@ export const headerCategory = ref([
 
 export const headerDepartment = ref([
     { title: 'Department', align: 'center', key: 'description', sortable: true },
+    { title: 'Status', align: 'center', key: 'status', sortable: true },
+    { title: 'Actions', align: 'start', key: 'actions' }
+]);
+
+export const headerCourse = ref([
+    { title: 'Course', align: 'center', key: 'description', sortable: true },
     { title: 'Status', align: 'center', key: 'status', sortable: true },
     { title: 'Actions', align: 'start', key: 'actions' }
 ]);
