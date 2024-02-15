@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 14, 2024 at 11:10 AM
+-- Generation Time: Feb 15, 2024 at 11:22 AM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.13
 
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `tbl_borrower` (
   `type` varchar(50) NOT NULL,
   `status` int NOT NULL DEFAULT '0',
   `status_approval` int DEFAULT '0',
-  `id_image_path` varchar(100) NOT NULL,
+  `docs_file` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
