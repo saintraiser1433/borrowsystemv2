@@ -10,3 +10,7 @@ export const status = ref([
         description:'Inactive'
     }
 ])
+
+export const itemYear = ref(['First Year', 'Second Year','Third Year','Fourth Year'])
+export const itemType = ref(['Student', 'Faculty'])
+

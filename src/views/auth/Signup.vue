@@ -6,8 +6,12 @@
                     <div class="d-flex flex-column justify-center mb-6">
                         <div class="text-h5 font-weight-bold text-center text-dark">UPLOAD ID</div>
                         <v-divider class="mb-2"></v-divider>
+                        <div class="text-center text-pink-accent-4">
+                            {{ errors.docsFile }}
+
+                        </div>
                         <v-img :width="300" :aspect-ratio="1" cover class="img-border mx-auto mb-2"
-                            :src="generateFileName ? filePreview : 'images/no-image.jpg'"></v-img>
+                            :src="filePreview ? filePreview : 'images/no-image.jpg'"></v-img>
                         <v-file-input class="d-none" ref="uploader" accept="image/png, image/jpeg, image/bmp"
                             @change="uploadFile">
                         </v-file-input>
@@ -49,22 +53,22 @@
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Course:</div>
-                            <v-select :items="statusItem" density="compact" variant="outlined" item-title="description"
-                                item-value="id" v-model="courseId" v-bind="courseIdAttrs" :error-messages="errors.courseId">
+                            <v-select :items="courseItem" density="compact" variant="outlined" item-title="description"
+                                item-value="courseId" v-model="courseId" v-bind="courseIdAttrs"
+                                :error-messages="errors.courseId">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Department:</div>
-                            <v-select :items="statusItem" density="compact" variant="outlined" item-title="description"
-                                item-value="id" v-model="departmentId" v-bind="departmentIdAttrs"
+                            <v-select :items="departmentItem" density="compact" variant="outlined" item-title="description"
+                                item-value="departmentId" v-model="departmentId" v-bind="departmentIdAttrs"
                                 :error-messages="errors.departmentId">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Year Level:</div>
-                            <v-select :items="statusItem" density="compact" variant="outlined" item-title="description"
-                                item-value="id" v-model="yearLevel" v-bind="yearLevelAttrs"
-                                :error-messages="errors.yearLevel">
+                            <v-select :items="itemYear" density="compact" variant="outlined" v-model="yearLevel"
+                                v-bind="yearLevelAttrs" :error-messages="errors.yearLevel">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
@@ -75,7 +79,7 @@
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Registered As:</div>
-                            <v-select :items="statusItem" density="compact" variant="outlined" item-title="description"
+                            <v-select :items="itemType" density="compact" variant="outlined" item-title="description"
                                 item-value="id" v-model="type" v-bind="typeAttrs" :error-messages="errors.type">
                             </v-select>
                         </v-col>
@@ -93,15 +97,15 @@
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Confirm Password:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="password" v-bind="passwordAttrs"
-                                :error-messages="errors.password">
+                            <v-text-field density="compact" variant="outlined" v-model="confirmPassword"
+                                v-bind="confirmPasswordAttrs" :error-messages="errors.confirmPassword">
                             </v-text-field>
                         </v-col>
                     </v-row>
                 </v-col>
             </v-row>
 
-            <v-btn block class="mb-8" color="blue" size="large" variant="tonal">
+            <v-btn block type="submit" class="mb-8" color="blue" size="large" variant="tonal">
                 Sign Up
             </v-btn>
             <v-card-text class="text-center">
@@ -114,29 +118,34 @@
 </template>
 
 <script setup>
-import { useForm } from 'vee-validate';
+import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { v4 as uuidv4 } from 'uuid';
-// import { useFileUploader } from '@/composable/useFileUploader'
-const uploader = ref(null);
-const filePreview = ref(null);
-const generateFileName = ref(null);
+import { ref, onMounted } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import { useAxios } from '@/composable/useAxios'
+import { Toaster } from '@/composable/useToast'
+import { itemYear, itemType } from '@/constants/selection'
+const uploader = ref(null)
+const filePreview = ref(null)
+const courseItem = ref([])
+const departmentItem = ref([])
 const router = useRouter()
+const fileData = ref(null)
 const yupSchema = yup.object().shape({
-    borrowerId: yup.string().required(),
-    firstName: yup.string().required(),
-    middleName: yup.string().required(),
-    lastName: yup.string().required(),
-    phoneNumber: yup.number().required(),
-    yearLevel: yup.string().required(),
-    courseId: yup.number().required(),
-    departmentId: yup.number().required(),
-    type: yup.string().required(),
-    docsFile: yup.string().required(),
-    username: yup.string().required(),
-    password: yup.string().required(),
+    borrowerId: yup.string().required('Borrower ID is required'),
+    firstName: yup.string().required('First Name is required'),
+    middleName: yup.string().required('Middle Name is required'),
+    lastName: yup.string().required('Last Name is required'),
+    phoneNumber: yup.number().required('Phone Number is required'),
+    yearLevel: yup.string().required('Year Level is required'),
+    courseId: yup.number().required('Course is required'),
+    departmentId: yup.number().required('Department is required'),
+    type: yup.string().required('Resident Type is required'),
+    docsFile: yup.string().required('Needed to upload ID for verification'),
+    username: yup.string().required('Username is required'),
+    password: yup.string().required('Password is required'),
+    confirmPassword: yup.string().required().oneOf([yup.ref('password')], 'Passwords do not match'),
 });
 
 const { handleSubmit, defineField, setValues, errors } = useForm({
@@ -154,10 +163,9 @@ const [departmentId, departmentIdAttrs] = defineField('departmentId');
 const [type, typeAttrs] = defineField('type');
 const [username, usernameAttrs] = defineField('username');
 const [password, passwordAttrs] = defineField('password');
-
-
-// const { signup } = useActions(['signup']);
-
+const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword');
+const { useToaster } = Toaster();
+//methods
 const clickFile = () => {
     uploader.value.click();
 }
@@ -167,7 +175,7 @@ const backToLogin = () => {
 }
 
 const uploadFile = async (e) => {
-    const filePath = e.target.files[0]
+    fileData.value = e.target.files[0]
 
     const readData = (f) =>
         new Promise((resolve) => {
@@ -179,12 +187,55 @@ const uploadFile = async (e) => {
             })
         });
 
-    filePreview.value = await readData(filePath);
+    filePreview.value = await readData(fileData.value);
+
 }
 
-const onSignup = handleSubmit((values) => {
-    alert(values)
+const fetchCourseItem = async () => {
+    const response = await useAxios({
+        method: 'GET',
+        api: '/course?action=GET'
+    });
+    courseItem.value = response.data
+}
+
+const fetchDepartmentItem = async () => {
+    const response = await useAxios({
+        method: 'GET',
+        api: '/department?action=GET'
+    });
+    departmentItem.value = response.data
+}
+
+const onSignup = handleSubmit(async (values) => {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(values));
+    formData.append('files', fileData.value);
+    const response = await useAxios({
+        method: 'POST',
+        api: '/signup.php?action=POST',
+        data: formData,
+        header: {
+            'Content-Type': 'multipart/form-data'
+        },
+    });
+    if (response.ok) {
+        // router.push('/');
+        useToaster(response.data.message, 'success');
+    } else {
+        useToaster(response.error, 'error');
+    }
 });
+
+//end
+
+//lifecycle
+onMounted(() => {
+    fetchCourseItem()
+    fetchDepartmentItem()
+})
+
+
 </script>
 
 <style scoped></style>

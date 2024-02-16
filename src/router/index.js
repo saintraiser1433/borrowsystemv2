@@ -27,9 +27,9 @@ const routes = [
       {
         path: "/borrower",
         name: "Borrower",
-        component: () => import("@/views/admin/Students.vue"),
+        component: () => import("@/views/admin/Borrower.vue"),
         meta: {
-          title: "Manage Student",
+          title: "Manage Borrower",
           subtitle: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
         },
       },
@@ -57,6 +57,15 @@ const routes = [
         component: () => import("@/views/admin/Department.vue"),
         meta: {
           title: "Manage Department",
+          subtitle: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        },
+      },
+      {
+        path: "/userapproval",
+        name: "Approval",
+        component: () => import("@/views/admin/UserApproval.vue"),
+        meta: {
+          title: "Manage Approval Borrower",
           subtitle: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
         },
       },

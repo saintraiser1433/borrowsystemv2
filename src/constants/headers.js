@@ -11,7 +11,6 @@ export const headerInventory = ref([
     { title: 'Condition', align: 'start', key: 'item_condition', sortable: true },
     { title: 'Status', align: 'start', key: 'status', sortable: true },
     { title: 'Actions', align: 'start', key: 'actions' }
-
 ]);
 
 export const headerCategory = ref([
@@ -29,6 +28,16 @@ export const headerDepartment = ref([
 export const headerCourse = ref([
     { title: 'Course', align: 'center', key: 'description', sortable: true },
     { title: 'Status', align: 'center', key: 'status', sortable: true },
+    { title: 'Actions', align: 'start', key: 'actions' }
+]);
+
+export const headerApproval = ref([
+    { title: 'Full Name', align: 'start', key: 'full_name' },
+    { title: 'Type', align: 'start', key: 'type', sortable: true },
+    { title: 'Department', align: 'start', key: 'department_name', sortable: true },
+    { title: 'Course', align: 'start', key: 'course_name', sortable: true },
+    { title: 'Phone Number', align: 'start', key: 'phone_number', sortable: true },
+    { title: 'File', align: 'start', key: 'docs_file'},
     { title: 'Actions', align: 'start', key: 'actions' }
 ]);
 

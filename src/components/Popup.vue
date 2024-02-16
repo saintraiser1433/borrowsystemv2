@@ -1,7 +1,7 @@
 <template>
         <v-dialog persistent transition="dialog-bottom-transition" :width="width">
         <template v-slot:activator="{ props }">
-            <v-btn color="primary" v-bind="props" @click="toggleModal">
+            <v-btn color="primary" v-if="haveButton" v-bind="props" @click="toggleModal">
                 <v-icon left class="mr-2">mdi-account-plus</v-icon>
                 {{ btnName }}
             </v-btn>
@@ -34,6 +34,10 @@ defineProps({
     width: {
         type: Number,
         default: 1024
+    },
+    haveButton: {
+        type: Boolean,
+        default:true
     },
 })
 

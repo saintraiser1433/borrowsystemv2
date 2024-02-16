@@ -15,7 +15,7 @@ $json_data = file_get_contents("php://input");
 $data = json_decode($json_data, true);
 switch ($action) {
     case 'GET':
-        $sql = "SELECT department_id,description,status FROM tbl_department order by department_id asc";
+        $sql = "SELECT department_id,department_name,status FROM tbl_department order by department_id asc";
         $rs = $conn->query($sql);
         $data = [];
 
@@ -24,7 +24,7 @@ switch ($action) {
                 // Assuming your resident table has 'id', 'name', and 'age' columns
                 $data[] = [
                     'departmentId' => $row['department_id'],
-                    'description' => $row['description'],
+                    'description' => $row['department_name'],
                     'status' => $row['status']
                 ];
             }
@@ -34,7 +34,7 @@ switch ($action) {
     case 'POST':
         $description = $data['description'];
         $status = $data['status'];
-        $query = "INSERT INTO tbl_department (description,status) 
+        $query = "INSERT INTO tbl_department (department_name,status) 
         values ('$description',$status)";
         $stmt = $conn->query($query);
         if ($stmt) {
@@ -49,7 +49,7 @@ switch ($action) {
         $departmentId = $data['departmentId'];
 
         $query = "UPDATE tbl_department SET 
-        description='$description',
+        department_name='$description',
         status=$status
         where department_id=$departmentId";
         $stmt = $conn->query($query);
