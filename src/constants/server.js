@@ -1,3 +1,3 @@
 export const development = {
-    baseUrl : 'http://localhost:8383/borrowing-api'
+    baseUrl : 'http://localhost/borrowing-api'
 }

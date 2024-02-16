@@ -9,7 +9,7 @@
             <template #default>
                 <CourseTable :items="items" :headers="headers">
                     <template v-slot:[`item.docs_file`]="{ item }">
-                        <a :href="`http://localhost:8383/borrowing-api/uploads/${item.docs_file}`">Download</a>
+                        <a :href="`http://localhost/borrowing-api/uploads/${item.docs_file}`">Download</a>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-btn flat color="green-darken-1" @click="approve(item.borrower_id)">Approved</v-btn> |
@@ -47,7 +47,7 @@ const { useToaster } = Toaster();
 const fetchForApproval = async () => {
     const response = await useAxios({
         method: 'GET',
-        api: '/borrower?action=GET'
+        api: '/borrower?action=PENDING'
     });
     if (response.ok) {
         items.value = response.data

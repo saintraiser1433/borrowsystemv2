@@ -52,9 +52,16 @@
                             </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
+                            <div class="text-subtitle-1 text-medium-emphasis">Registered As:</div>
+                            <v-select :items="itemType" density="compact" variant="outlined" item-title="description"
+                                item-value="id" v-model="type" @update:modelValue="stateType" v-bind="typeAttrs"
+                                :error-messages="errors.type">
+                            </v-select>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Course:</div>
                             <v-select :items="courseItem" density="compact" variant="outlined" item-title="description"
-                                item-value="courseId" v-model="courseId" v-bind="courseIdAttrs"
+                                item-value="courseId" v-model="courseId" v-bind="courseIdAttrs" :disabled="courseDisabled"
                                 :error-messages="errors.courseId">
                             </v-select>
                         </v-col>
@@ -62,13 +69,13 @@
                             <div class="text-subtitle-1 text-medium-emphasis">Department:</div>
                             <v-select :items="departmentItem" density="compact" variant="outlined" item-title="description"
                                 item-value="departmentId" v-model="departmentId" v-bind="departmentIdAttrs"
-                                :error-messages="errors.departmentId">
+                                :disabled="departmentDisabled" :error-messages="errors.departmentId">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Year Level:</div>
                             <v-select :items="itemYear" density="compact" variant="outlined" v-model="yearLevel"
-                                v-bind="yearLevelAttrs" :error-messages="errors.yearLevel">
+                                :disabled="yearLevelDisabled" v-bind="yearLevelAttrs" :error-messages="errors.yearLevel">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
@@ -77,12 +84,7 @@
                                 v-bind="phoneNumberAttrs" :error-messages="errors.phoneNumber">
                             </v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="12" md="4">
-                            <div class="text-subtitle-1 text-medium-emphasis">Registered As:</div>
-                            <v-select :items="itemType" density="compact" variant="outlined" item-title="description"
-                                item-value="id" v-model="type" v-bind="typeAttrs" :error-messages="errors.type">
-                            </v-select>
-                        </v-col>
+
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Username:</div>
                             <v-text-field density="compact" variant="outlined" v-model="username" v-bind="usernameAttrs"
@@ -132,15 +134,34 @@ const courseItem = ref([])
 const departmentItem = ref([])
 const router = useRouter()
 const fileData = ref(null)
+const courseDisabled = ref(true);
+const departmentDisabled = ref(true);
+const yearLevelDisabled = ref(true);
+
 const yupSchema = yup.object().shape({
     borrowerId: yup.string().required('Borrower ID is required'),
     firstName: yup.string().required('First Name is required'),
     middleName: yup.string().required('Middle Name is required'),
     lastName: yup.string().required('Last Name is required'),
     phoneNumber: yup.number().required('Phone Number is required'),
-    yearLevel: yup.string().required('Year Level is required'),
-    courseId: yup.number().required('Course is required'),
-    departmentId: yup.number().required('Department is required'),
+    yearLevel: yup.lazy(() => {
+        if (!yearLevelDisabled.value) {
+            return yup.string().required('Year Level is required');
+        }
+        return yup.string().notRequired();
+    }),
+    courseId: yup.lazy(() => {
+        if (!courseDisabled.value) {
+            return yup.number().required('Course is required');
+        }
+        return yup.number().notRequired();
+    }),
+    departmentId: yup.lazy(() => {
+        if (!departmentDisabled.value) {
+            return yup.number().required('Department is required');
+        }
+        return yup.string().notRequired();
+    }),
     type: yup.string().required('Resident Type is required'),
     docsFile: yup.string().required('Needed to upload ID for verification'),
     username: yup.string().required('Username is required'),
@@ -166,6 +187,25 @@ const [password, passwordAttrs] = defineField('password');
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword');
 const { useToaster } = Toaster();
 //methods
+
+
+
+const stateType = (e) => {
+    if (e === 'Student') {
+        courseDisabled.value = false
+        yearLevelDisabled.value = false
+        departmentDisabled.value = true
+    } else if (e === 'Faculty') {
+        departmentDisabled.value = false
+        courseDisabled.value = true
+        yearLevelDisabled.value = true
+    } else {
+        courseDisabled.value = true
+        yearLevelDisabled.value = true
+        departmentDisabled.value = true
+    }
+}
+
 const clickFile = () => {
     uploader.value.click();
 }
@@ -220,7 +260,6 @@ const onSignup = handleSubmit(async (values) => {
         },
     });
     if (response.ok) {
-        // router.push('/');
         useToaster(response.data.message, 'success');
     } else {
         useToaster(response.error, 'error');

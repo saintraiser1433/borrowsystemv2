@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer color="blue-grey-darken-3" :width="300">
-        <!-- <v-list-item prepend-avatar="/images/seait.png">
+        <v-list-item prepend-avatar="/images/seait.png">
             <v-list-item-title class="text-grey-lighten-3">
                 <span class="text-teal-darken-1 font-weight-bold fontSmall">SEA</span>
                 <span class="fontSmall text-yellow-accent-2">IT</span>
@@ -9,8 +9,8 @@
             <v-list-item-subtitle class="text-grey-lighten-5 fontSmallSubtitle">
                 Advance Borrowing System V1.0
             </v-list-item-subtitle>
-        </v-list-item> -->
-        <v-list-item>
+        </v-list-item>
+        <!-- <v-list-item>
             <v-list-item-title class="text-grey-lighten-3">
                 <span class="text-teal-darken-1 font-weight-bold fontSmall">SAMPLE</span>
                 <span class="fontSmall text-yellow-accent-2">SAMPLE</span>
@@ -19,7 +19,7 @@
             <v-list-item-subtitle class="text-grey-lighten-5 fontSmallSubtitle">
                 SAMPLE SYSTEM
             </v-list-item-subtitle>
-        </v-list-item>
+        </v-list-item> -->
         <v-divider></v-divider>
         <v-list>
             <div v-for="(data, index) in item" :key="index">
