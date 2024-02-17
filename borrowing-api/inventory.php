@@ -1,20 +1,11 @@
 <?php
-// Allow requests from any origin
-header("Access-Control-Allow-Origin: *");
-
-// Allow these methods for the preflight request (OPTIONS)
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS,DELETE,PUT");
-
-// Allow these headers for the preflight request (OPTIONS)
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-include 'conn.php';
+include 'header.php';
 // Sample data (you can replace this with a database connection or any other data source)
 $action = $_GET['action'];
 $json_data = file_get_contents("php://input");
 $data = json_decode($json_data, true);
-switch ($action) {
-    case 'GET':
+if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    if ($action === 'GET') {
         $sql = "SELECT
         a.item_code,
         a.item_name,
@@ -53,9 +44,9 @@ switch ($action) {
             }
         }
         echo json_encode($data);
-        break;
-
-    case 'POST':
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    if ($action === 'POST') {
         $fetch = json_decode($_POST['data'], true);
         $asset_tag = $fetch['assetTag'];
         $item_name = $fetch['itemName'];
@@ -80,8 +71,9 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Failed to add asset']);
         }
-        break;
-    case 'PUT':
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
+    if ($action === 'PUT') {
         $fetch = json_decode($_POST['data'], true);
         $asset_tag = $fetch['assetTag'];
         $item_name = $fetch['itemName'];
@@ -113,16 +105,15 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Failed to update asset']);
         }
-        break;
-    case 'DELETE':
-        $assettag = $_GET['asset_tag'];
-        $sqlDelete = "DELETE FROM tbl_inventory WHERE item_code = '$assettag'";
-        $result = $conn->query($sqlDelete);
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+    $assettag = $_GET['asset_tag'];
+    $sqlDelete = "DELETE FROM tbl_inventory WHERE item_code = '$assettag'";
+    $result = $conn->query($sqlDelete);
 
-        if ($result) {
-            echo json_encode(['message' => 'Item deleted successfully']);
-        } else {
-            echo json_encode(['error' => 'Failed to delete Item']);
-        }
-        break;
+    if ($result) {
+        echo json_encode(['message' => 'Item deleted successfully']);
+    } else {
+        echo json_encode(['error' => 'Failed to delete Item']);
+    }
 }

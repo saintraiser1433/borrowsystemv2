@@ -1,20 +1,11 @@
 <?php
-// Allow requests from any origin
-header("Access-Control-Allow-Origin: *");
-
-// Allow these methods for the preflight request (OPTIONS)
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS,DELETE,PUT");
-
-// Allow these headers for the preflight request (OPTIONS)
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-include 'conn.php';
+include 'header.php';
 // Sample data (you can replace this with a database connection or any other data source)
 $action = $_GET['action'];
 $json_data = file_get_contents("php://input");
 $data = json_decode($json_data, true);
-switch ($action) {
-    case 'GET':
+if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    if ($action === 'GET') {
         $sql = "SELECT category_id,category_name,status FROM tbl_categories order by category_id asc";
         $rs = $conn->query($sql);
         $data = [];
@@ -30,8 +21,9 @@ switch ($action) {
             }
         }
         echo json_encode($data);
-        break;
-    case 'POST':
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+    if ($action === 'POST') {
         $description = $data['description'];
         $status = $data['status'];
         $query = "INSERT INTO tbl_categories (category_name,status) 
@@ -40,10 +32,11 @@ switch ($action) {
         if ($stmt) {
             echo json_encode(['message' => 'Category added successfully']);
         } else {
-            echo json_encode(['error' => 'Failed to add category']);
+            echo json_encode(['error' =>  mysqli_error($conn)]);
         }
-        break;
-    case 'PUT':
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'PUT') {
+    if ($action === 'PUT') {
         $description = $data['description'];
         $status = $data['status'];
         $categoryId = $data['categoryId'];
@@ -56,18 +49,17 @@ switch ($action) {
         if ($stmt) {
             echo json_encode(['message' => 'Category updated successfully']);
         } else {
-            echo json_encode(['error' => 'Failed to update category']);
+            echo json_encode(['error' =>  mysqli_error($conn)]);
         }
-        break;
-    case 'DELETE':
-        $categoryId = $_GET['categoryId'];
-        $sqlDelete = "DELETE FROM tbl_categories WHERE category_id = $categoryId";
-        $result = $conn->query($sqlDelete);
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == 'DELETE') {
+    $categoryId = $_GET['categoryId'];
+    $sqlDelete = "DELETE FROM tbl_categories WHERE category_id = $categoryId";
+    $result = $conn->query($sqlDelete);
 
-        if ($result) {
-            echo json_encode(['message' => 'Category deleted successfully']);
-        } else {
-            echo json_encode(['error' => 'Failed to delete Category']);
-        }
-        break;
+    if ($result) {
+        echo json_encode(['message' => 'Category deleted successfully']);
+    } else {
+        echo json_encode(['error' =>  mysqli_error($conn)]);
+    }
 }

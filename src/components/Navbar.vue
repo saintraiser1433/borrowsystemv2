@@ -23,7 +23,7 @@
 
                 <v-list>
 
-                    <v-list-item class="compact font-weight-bold" v-for="i in menu" :key="i.title" link>
+                    <v-list-item class="compact font-weight-bold" v-for="i in menu" :key="i.title" :to="i.path" link>
                         <template #prepend>
                             <v-icon color="text-grey">{{ i.icon }}</v-icon>
                         </template>
@@ -48,7 +48,8 @@ const menu = ref([
     },
     {
         icon: 'mdi-arrow-right',
-        title: 'Logout'
+        title: 'Logout',
+        path:'../'
     }])
 </script>
 

@@ -8,7 +8,6 @@
                         <v-divider class="mb-2"></v-divider>
                         <div class="text-center text-pink-accent-4">
                             {{ errors.docsFile }}
-
                         </div>
                         <v-img :width="300" :aspect-ratio="1" cover class="img-border mx-auto mb-2"
                             :src="filePreview ? filePreview : 'images/no-image.jpg'"></v-img>
@@ -35,50 +34,42 @@
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">First Name:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="firstName" v-bind="firstNameAttrs"
-                                :error-messages="errors.firstName">
+                            <v-text-field @input="firstName = uppercase($event)" density="compact" variant="outlined"
+                                v-model="firstName" v-bind="firstNameAttrs" :error-messages="errors.firstName">
                             </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Last Name:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="lastName" v-bind="lastNameAttrs"
-                                :error-messages="errors.lastName">
+                            <v-text-field @input="lastName = uppercase($event)" density="compact" variant="outlined"
+                                v-model="lastName" v-bind="lastNameAttrs" :error-messages="errors.lastName">
                             </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Middle Name:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="middleName" v-bind="middleNameAttrs"
-                                :error-messages="errors.middleName">
+                            <v-text-field @input="middleName = uppercase($event)" density="compact" variant="outlined"
+                                v-model="middleName" v-bind="middleNameAttrs" :error-messages="errors.middleName">
                             </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Registered As:</div>
-                            <v-select :items="itemType" density="compact" variant="outlined" item-title="description"
-                                item-value="id" v-model="type" @update:modelValue="stateType" v-bind="typeAttrs"
-                                :error-messages="errors.type">
-                            </v-select>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="4">
-                            <div class="text-subtitle-1 text-medium-emphasis">Course:</div>
-                            <v-select :items="courseItem" density="compact" variant="outlined" item-title="description"
-                                item-value="courseId" v-model="courseId" v-bind="courseIdAttrs" :disabled="courseDisabled"
-                                :error-messages="errors.courseId">
+                            <v-select :items="itemType" density="compact" variant="outlined" v-model="type"
+                                v-bind="typeAttrs" :error-messages="errors.type">
                             </v-select>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Department:</div>
                             <v-select :items="departmentItem" density="compact" variant="outlined" item-title="description"
-                                item-value="departmentId" v-model="departmentId" v-bind="departmentIdAttrs"
-                                :disabled="departmentDisabled" :error-messages="errors.departmentId">
+                                item-value="departmentId" v-model="department" v-bind="departmentAttrs"
+                                :error-messages="errors.department">
                             </v-select>
                         </v-col>
-                        <v-col cols="12" sm="12" md="4">
-                            <div class="text-subtitle-1 text-medium-emphasis">Year Level:</div>
-                            <v-select :items="itemYear" density="compact" variant="outlined" v-model="yearLevel"
-                                :disabled="yearLevelDisabled" v-bind="yearLevelAttrs" :error-messages="errors.yearLevel">
-                            </v-select>
+                        <v-col cols="12" sm="12" md="6">
+                            <div class="text-subtitle-1 text-medium-emphasis">Email Address:</div>
+                            <v-text-field density="compact" variant="outlined" v-model="email" v-bind="emailAttrs"
+                                :error-messages="errors.email">
+                            </v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="12" md="4">
+                        <v-col cols="12" sm="12" md="6">
                             <div class="text-subtitle-1 text-medium-emphasis">Phone Number:</div>
                             <v-text-field density="compact" variant="outlined" v-model="phoneNumber"
                                 v-bind="phoneNumberAttrs" :error-messages="errors.phoneNumber">
@@ -127,16 +118,12 @@ import { ref, onMounted } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useAxios } from '@/composable/useAxios'
 import { Toaster } from '@/composable/useToast'
-import { itemYear, itemType } from '@/constants/selection'
+import { itemType } from '@/constants/selection'
 const uploader = ref(null)
 const filePreview = ref(null)
-const courseItem = ref([])
 const departmentItem = ref([])
 const router = useRouter()
 const fileData = ref(null)
-const courseDisabled = ref(true);
-const departmentDisabled = ref(true);
-const yearLevelDisabled = ref(true);
 
 const yupSchema = yup.object().shape({
     borrowerId: yup.string().required('Borrower ID is required'),
@@ -144,25 +131,9 @@ const yupSchema = yup.object().shape({
     middleName: yup.string().required('Middle Name is required'),
     lastName: yup.string().required('Last Name is required'),
     phoneNumber: yup.number().required('Phone Number is required'),
-    yearLevel: yup.lazy(() => {
-        if (!yearLevelDisabled.value) {
-            return yup.string().required('Year Level is required');
-        }
-        return yup.string().notRequired();
-    }),
-    courseId: yup.lazy(() => {
-        if (!courseDisabled.value) {
-            return yup.number().required('Course is required');
-        }
-        return yup.number().notRequired();
-    }),
-    departmentId: yup.lazy(() => {
-        if (!departmentDisabled.value) {
-            return yup.number().required('Department is required');
-        }
-        return yup.string().notRequired();
-    }),
-    type: yup.string().required('Resident Type is required'),
+    department: yup.number().required('Department is required'),
+    type: yup.string().required('Position is required'),
+    email: yup.string().email().required('Email is required'),
     docsFile: yup.string().required('Needed to upload ID for verification'),
     username: yup.string().required('Username is required'),
     password: yup.string().required('Password is required'),
@@ -178,32 +149,17 @@ const [firstName, firstNameAttrs] = defineField('firstName');
 const [middleName, middleNameAttrs] = defineField('middleName');
 const [lastName, lastNameAttrs] = defineField('lastName');
 const [phoneNumber, phoneNumberAttrs] = defineField('phoneNumber');
-const [yearLevel, yearLevelAttrs] = defineField('yearLevel');
-const [courseId, courseIdAttrs] = defineField('courseId');
-const [departmentId, departmentIdAttrs] = defineField('departmentId');
+const [department, departmentAttrs] = defineField('department');
 const [type, typeAttrs] = defineField('type');
+const [email, emailAttrs] = defineField('email');
 const [username, usernameAttrs] = defineField('username');
 const [password, passwordAttrs] = defineField('password');
 const [confirmPassword, confirmPasswordAttrs] = defineField('confirmPassword');
 const { useToaster } = Toaster();
+
 //methods
-
-
-
-const stateType = (e) => {
-    if (e === 'Student') {
-        courseDisabled.value = false
-        yearLevelDisabled.value = false
-        departmentDisabled.value = true
-    } else if (e === 'Faculty') {
-        departmentDisabled.value = false
-        courseDisabled.value = true
-        yearLevelDisabled.value = true
-    } else {
-        courseDisabled.value = true
-        yearLevelDisabled.value = true
-        departmentDisabled.value = true
-    }
+const uppercase = (e) => {
+    return e.target.value.toUpperCase();
 }
 
 const clickFile = () => {
@@ -213,6 +169,7 @@ const clickFile = () => {
 const backToLogin = () => {
     router.push('/');
 }
+
 
 const uploadFile = async (e) => {
     fileData.value = e.target.files[0]
@@ -231,20 +188,12 @@ const uploadFile = async (e) => {
 
 }
 
-const fetchCourseItem = async () => {
-    const response = await useAxios({
-        method: 'GET',
-        api: '/course?action=GET'
-    });
-    courseItem.value = response.data
-}
-
 const fetchDepartmentItem = async () => {
     const response = await useAxios({
         method: 'GET',
         api: '/department?action=GET'
     });
-    departmentItem.value = response.data
+    departmentItem.value = response.data;
 }
 
 const onSignup = handleSubmit(async (values) => {
@@ -262,7 +211,7 @@ const onSignup = handleSubmit(async (values) => {
     if (response.ok) {
         useToaster(response.data.message, 'success');
     } else {
-        useToaster(response.error, 'error');
+        useToaster(response.data.error, 'error');
     }
 });
 
@@ -270,7 +219,6 @@ const onSignup = handleSubmit(async (values) => {
 
 //lifecycle
 onMounted(() => {
-    fetchCourseItem()
     fetchDepartmentItem()
 })
 

@@ -45,12 +45,12 @@
                         </div>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon class="me-2 bg-yellow-darken-4 rounded-circle" @click="editItem(item)">
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon class="bg-red-darken-2 rounded-circle" @click="deleteItem(item.departmentId)">
-                            mdi-delete
-                        </v-icon>
+                        <v-avatar class="me-1 bg-yellow-darken-4 cursor-pointer" size="small" @click="editItem(item)">
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-avatar>
+                        <v-avatar color="red-darken-1 cursor-pointer" size="small" @click="deleteItem(item.departmentId)">
+                            <v-icon>mdi-delete</v-icon>
+                        </v-avatar>
                     </template>
                 </DepartmentTable>
             </template>

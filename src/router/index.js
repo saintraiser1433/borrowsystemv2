@@ -16,7 +16,7 @@ const routes = [
     component: () => import("@/layout/AdminLayout.vue"),
     children: [
       {
-        path: '',
+        path: "/",
         name: "Dashboard",
         component: () => import("@/views/admin/Dashboard.vue"),
         meta: {
@@ -25,7 +25,7 @@ const routes = [
         },
       },
       {
-        path: "/borrower",
+        path: "borrower",
         name: "Borrower",
         component: () => import("@/views/admin/Borrower.vue"),
         meta: {
@@ -34,7 +34,7 @@ const routes = [
         },
       },
       {
-        path: "/category",
+        path: "category",
         name: "Category",
         component: () => import("@/views/admin/Category.vue"),
         meta: {
@@ -43,16 +43,7 @@ const routes = [
         },
       },
       {
-        path: "/course",
-        name: "Course",
-        component: () => import("@/views/admin/Course.vue"),
-        meta: {
-          title: "Manage Courses",
-          subtitle: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-        },
-      },
-      {
-        path: "/department",
+        path: "department",
         name: "Department",
         component: () => import("@/views/admin/Department.vue"),
         meta: {
@@ -61,7 +52,7 @@ const routes = [
         },
       },
       {
-        path: "/userapproval",
+        path: "userapproval",
         name: "Approval",
         component: () => import("@/views/admin/UserApproval.vue"),
         meta: {
@@ -70,7 +61,7 @@ const routes = [
         },
       },
       {
-        path: "/inventory",
+        path: "inventory",
         name: "Inventory",
         component: () => import("@/views/admin/Inventory.vue"),
         meta: {
@@ -79,7 +70,7 @@ const routes = [
         },
       },
       {
-        path: "/returned",
+        path: "returned",
         name: "Returned",
         component: () => import("@/views/admin/Returned.vue"),
         meta: {
@@ -88,7 +79,7 @@ const routes = [
         },
       },
       {
-        path: "/transaction",
+        path: "transaction",
         name: "Transaction",
         component: () => import("@/views/admin/Transactions.vue"),
         meta: {
@@ -97,7 +88,7 @@ const routes = [
         },
       },
       {
-        path: "/report",
+        path: "report",
         name: "Report",
         component: () => import("@/views/admin/Reports.vue"),
         meta: {

@@ -5,8 +5,7 @@
                 <TitleBar />
             </v-col>
             <v-col cols="auto">
-                <Popup :title="ModalTitle" btnName="Add Category" @toggleModal="openModal" v-model="isActive"
-                    :width="480">
+                <Popup :title="ModalTitle" btnName="Add Category" @toggleModal="openModal" v-model="isActive" :width="480">
                     <template #body>
                         <v-form @submit.prevent="onSubmit">
                             <v-row>
@@ -45,12 +44,12 @@
                         </div>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon class="me-2 bg-yellow-darken-4 rounded-circle" @click="editItem(item)">
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon class="bg-red-darken-2 rounded-circle" @click="deleteItem(item.categoryId)">
-                            mdi-delete
-                        </v-icon>
+                        <v-avatar class="me-1 bg-yellow-darken-4 cursor-pointer" size="small" @click="editItem(item)">
+                            <v-icon> mdi-pencil</v-icon>
+                        </v-avatar>
+                        <v-avatar class="bg-red-darken-2 cursor-pointer" size="small" @click="deleteItem(item.categoryId)">
+                            <v-icon>mdi-delete</v-icon>
+                        </v-avatar>
                     </template>
                 </CategoryTable>
             </template>
@@ -193,7 +192,7 @@ watch([isActive, isUpdate], ([active, update]) => {
     if (active && !update) {
         resetForm({
             values: {
-                categoryId:0,
+                categoryId: 0,
                 description: '',
                 status: '1'
             }

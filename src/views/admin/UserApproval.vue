@@ -7,15 +7,23 @@
         </v-row>
         <Suspense>
             <template #default>
-                <CourseTable :items="items" :headers="headers">
+                <BorrowerTable :items="items" :headers="headers">
                     <template v-slot:[`item.docs_file`]="{ item }">
-                        <a :href="`http://localhost/borrowing-api/uploads/${item.docs_file}`">Download</a>
+                        <v-badge color="teal-darken-1 mb-2">
+                            <template #badge>
+                                <a class="text-white text-decoration-none" :href="`http://localhost:8383/borrowing-api/uploads/${item.docs_file}`">Show</a>
+                            </template>   
+                        </v-badge>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-btn flat color="green-darken-1" @click="approve(item.borrower_id)">Approved</v-btn> |
-                        <v-btn flat color="red-accent-3" @click="reject(item.borrower_id)">Reject</v-btn>
+                        <v-avatar class="me-1 bg-green-darken-1 cursor-pointer" size="small" @click="approve(item.borrower_id)">
+                            <v-icon>mdi-thumb-up</v-icon>
+                        </v-avatar>
+                        <v-avatar class="bg-red-darken-1 cursor-pointer" size="small" @click="reject(item.borrower_id)">
+                            <v-icon>mdi-thumb-down</v-icon>
+                        </v-avatar>
                     </template>
-                </CourseTable>
+                </BorrowerTable>
             </template>
             <template #fallback>
                 <p>Loading</p>
@@ -36,7 +44,7 @@ import Swal from 'sweetalert2'
 //init
 const headers = ref(headerApproval)
 const items = ref([]);
-const CourseTable = defineAsyncComponent({
+const BorrowerTable = defineAsyncComponent({
     loader: () => import('@/components/Table.vue')
 })
 

@@ -3,58 +3,54 @@ export const item = ref([
   {
     icon: "mdi-monitor-dashboard",
     title: "Dashboard",
-    path: "/",
+    path: "",
   },
   {
     icon: "mdi-account-multiple",
     title: "Borrower",
     items: [
       {
-        title: "Course",
-        path: "/course",
-      },
-      {
         title: "Department",
-        path: "/department",
+        path: "department",
       },
       {
         title: "Borrowers",
-        path: "/borrower",
+        path: "borrower",
       },
       {
         title: "For Approval Users",
-        path: "/userapproval",
+        path: "userapproval",
       },
     ],
   },
   {
     icon: "mdi-package-variant",
     title: "Inventory",
-    path: "/inventory",
+    path: "inventory",
     items: [
       {
         title: "Category",
-        path: "/category",
+        path: "category",
       },
       {
         title: "Asset Master",
-        path: "/inventory",
+        path: "inventory",
       },
     ],
   },
   {
     icon: "mdi-keyboard-return",
     title: "Returned",
-    path: "/returned",
+    path: "returned",
   },
   {
     icon: "mdi-source-branch",
     title: "Transactions",
-    path: "/transaction",
+    path: "transaction",
   },
   {
     icon: "mdi-file-chart",
     title: "Reports",
-    path: "/report",
+    path: "report",
   },
 ]);

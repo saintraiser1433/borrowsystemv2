@@ -11,6 +11,5 @@ export const status = ref([
     }
 ])
 
-export const itemYear = ref(['First Year', 'Second Year','Third Year','Fourth Year'])
-export const itemType = ref(['Student', 'Faculty'])
+export const itemType = ref(['STUDENT', 'FACULTY'])
 
