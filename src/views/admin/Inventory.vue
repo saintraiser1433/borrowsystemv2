@@ -106,7 +106,7 @@
                         </div>
                         <div v-else>
                             <v-img :width="36" :aspect-ratio="1" cover class="mx-auto"
-                                :src="`http://localhost:8383/borrowing-api/uploads/${item.img_path}`"></v-img>
+                                :src="`http://localhost/borrowing-api/uploads/${item.img_path}`"></v-img>
                         </div>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">

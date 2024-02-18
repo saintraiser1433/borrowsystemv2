@@ -1,7 +1,7 @@
 <template>
     <Sidebar v-model="drawer" />
     <nav>
-        <v-app-bar app flat density="compact" @click="drawer = !drawer ">
+        <v-app-bar app flat density="compact" @click="drawer = !drawer">
             <template v-slot:prepend>
                 <v-app-bar-nav-icon></v-app-bar-nav-icon>
             </template>
@@ -11,7 +11,7 @@
                     <div class="text-center">
                         <v-btn color="dark" v-bind="props">
                             <template v-slot:prepend>
-                                <v-avatar image="images/man.png" size="small"></v-avatar>
+                                <v-avatar image="/images/man.png" size="small"></v-avatar>
                             </template>
                             Administrator
                             <template v-slot:append>
@@ -23,11 +23,11 @@
 
                 <v-list>
 
-                    <v-list-item class="compact font-weight-bold" v-for="i in menu" :key="i.title" :to="i.path" link>
+                    <v-list-item class="compact font-weight-bold" @click="logoutBtn">
                         <template #prepend>
-                            <v-icon color="text-grey">{{ i.icon }}</v-icon>
+                            <v-icon color="text-grey">mdi-arrow-right</v-icon>
                         </template>
-                        <v-list-item-title class="ml-5">{{ i.title }}</v-list-item-title>
+                        <v-list-item-title class="ml-5">Logout</v-list-item-title>
                     </v-list-item>
 
                 </v-list>
@@ -38,19 +38,19 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import Sidebar from './Sidebar.vue';
 
+const router = useRouter();
 const drawer = ref(true);
-const menu = ref([
-    {
-        icon: 'mdi-cogs',
-        title: 'Settings'
-    },
-    {
-        icon: 'mdi-arrow-right',
-        title: 'Logout',
-        path:'../'
-    }])
+const { useMutations } = createNamespacedHelpers('auth'); // specific module name
+const { logout } = useMutations(['logout'])
+const logoutBtn = () => {
+    logout();
+    router.push('../')
+}
+
 </script>
 
 <style scoped></style>

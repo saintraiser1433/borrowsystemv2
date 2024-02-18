@@ -14,9 +14,16 @@ const routes = [
   {
     path: '/admin',
     component: () => import("@/layout/AdminLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('isAuthenticated') && localStorage.getItem('role') === 'FACULTY') {
+        next();
+      } else {
+        next('../');
+      }
+    },
     children: [
       {
-        path: "/",
+        path: "",
         name: "Dashboard",
         component: () => import("@/views/admin/Dashboard.vue"),
         meta: {
@@ -101,6 +108,13 @@ const routes = [
   {
     path: '/user',
     component: () => import("@/layout/UserLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('isAuthenticated') && localStorage.getItem('role') === 'STUDENT') {
+        next();
+      } else {
+        next('../');
+      }
+    },
     children: [
       {
         path: '',

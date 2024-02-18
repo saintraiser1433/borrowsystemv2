@@ -5,6 +5,8 @@
         </div>
         <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
             {{ name }}
+            {{ isAuthenticated }}
+            {{ role }}
             <v-form @submit.prevent="onLogin">
                 <div class="text-subtitle-1 text-medium-emphasis">Username</div>
                 <v-text-field density="compact" placeholder="Username" v-model="username" v-bind="usernameAttrs"
@@ -33,8 +35,6 @@
 </template>
 
 <script setup>
-// import { createNamespacedHelpers } from 'vuex-composition-helpers';
-// const { useState } = createNamespacedHelpers('auth');
 import { Toaster } from '@/composable/useToast'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue';
@@ -42,11 +42,10 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { useAxios } from '@/composable/useAxios'
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-
 const router = useRouter()
 const visible = ref(false)
 const { useToaster } = Toaster();
-const { useState } = createNamespacedHelpers('auth'); // specific module name
+const { useState, useActions } = createNamespacedHelpers('auth'); // specific module name
 
 const yupSchema = yup.object().shape({
     username: yup.string().required('Username is not empty'),
@@ -59,7 +58,8 @@ const { handleSubmit, defineField, errors } = useForm({
 
 const [username, usernameAttrs] = defineField('username');
 const [password, passwordAttrs] = defineField('password');
-const { name } = useState(['name'])
+const { name, isAuthenticated, role } = useState(['name', 'isAuthenticated', 'role'])
+const { saveUser } = useActions(['saveUser'])
 
 const routerSignup = () => {
     router.push('/signup');
@@ -78,7 +78,12 @@ const onLogin = handleSubmit(async (values) => {
     });
     if (response.ok) {
         if (response.data.status === 1) {
-            useToaster(response.data.username, 'success');
+            saveUser(response.data.data)
+            if (isAuthenticated.value && role.value === 'STUDENT') {
+                router.push('/user/')
+            }else{
+                router.push('/admin/')
+            }
         } else {
             useToaster(response.data.message, 'error');
         }

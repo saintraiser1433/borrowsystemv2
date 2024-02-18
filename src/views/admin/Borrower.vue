@@ -9,7 +9,7 @@
             <template #default>
                 <BorrowerTable :items="items" :headers="headers">
                     <template v-slot:[`item.docs_file`]="{ item }">
-                        <a :href="`http://localhost:8383/borrowing-api/uploads/${item.docs_file}`">Download</a>
+                        <a :href="`http://localhost/borrowing-api/uploads/${item.docs_file}`">Download</a>
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-avatar class="me-1 bg-blue-accent-3 cursor-pointer" size="small" @click="editItem(item)">

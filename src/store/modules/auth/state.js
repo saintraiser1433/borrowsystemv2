@@ -1,8 +1,5 @@
 export default {
-    state(){
-        return{
-            name:'State Leelas'
-        }
-        
-    },
+    role:'',
+    name:'',
+    isAuthenticated:false
 }

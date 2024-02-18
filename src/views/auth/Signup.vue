@@ -84,13 +84,13 @@
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Password:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="password" v-bind="passwordAttrs"
+                            <v-text-field type="password" density="compact" variant="outlined" v-model="password" v-bind="passwordAttrs"
                                 :error-messages="errors.password">
                             </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="4">
                             <div class="text-subtitle-1 text-medium-emphasis">Confirm Password:</div>
-                            <v-text-field density="compact" variant="outlined" v-model="confirmPassword"
+                            <v-text-field type="password" density="compact" variant="outlined" v-model="confirmPassword"
                                 v-bind="confirmPasswordAttrs" :error-messages="errors.confirmPassword">
                             </v-text-field>
                         </v-col>
@@ -209,9 +209,14 @@ const onSignup = handleSubmit(async (values) => {
         },
     });
     if (response.ok) {
-        useToaster(response.data.message, 'success');
+        if(response.data.status==1){
+            useToaster(response.data.message, 'success');
+        }else{
+            useToaster(response.data.message, 'error');
+        }
+       
     } else {
-        useToaster(response.data.error, 'error');
+        useToaster(response.error, 'error');
     }
 });
 

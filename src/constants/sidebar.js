@@ -1,5 +1,5 @@
 import { ref } from "vue";
-export const item = ref([
+export const AdminSideBar = ref([
   {
     icon: "mdi-monitor-dashboard",
     title: "Dashboard",
@@ -52,5 +52,23 @@ export const item = ref([
     icon: "mdi-file-chart",
     title: "Reports",
     path: "report",
+  },
+]);
+
+export const clientSidebar = ref([
+  {
+    title: "Department",
+    icon: "mdi-account-multiple",
+    path: "department",
+  },
+  {
+    title: "Borrowers",
+    icon: "mdi-account-multiple",
+    path: "borrower",
+  },
+  {
+    title: "For Approval Users",
+    icon: "mdi-account-multiple",
+    path: "userapproval",
   },
 ]);

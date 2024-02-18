@@ -11,7 +11,7 @@
                     <template v-slot:[`item.docs_file`]="{ item }">
                         <v-badge color="teal-darken-1 mb-2">
                             <template #badge>
-                                <a class="text-white text-decoration-none" :href="`http://localhost:8383/borrowing-api/uploads/${item.docs_file}`">Show</a>
+                                <a class="text-white text-decoration-none" :href="`http://localhost/borrowing-api/uploads/${item.docs_file}`">Show</a>
                             </template>   
                         </v-badge>
                     </template>

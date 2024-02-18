@@ -22,7 +22,7 @@
         </v-list-item> -->
         <v-divider></v-divider>
         <v-list>
-            <div v-for="(data, index) in item" :key="index">
+            <div v-for="(data, index) in SideBarItem" :key="index">
                 <v-list-group v-if="data.items" class="compact font-weight-bold" :value="data.title">
                     <template v-slot:activator="{ props }">
                         <v-list-item v-bind="props" :title="data.title">
@@ -47,7 +47,9 @@
 </template>
 
 <script setup>
-import { item } from '@/constants/sidebar'
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+const { useState } = createNamespacedHelpers('sidebar');
+const { SideBarItem } = useState(['SideBarItem']);
 
 
 

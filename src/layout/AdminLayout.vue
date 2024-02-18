@@ -13,5 +13,15 @@
   
 <script setup>
 import Navbar from '@/components/Navbar.vue';
+import { AdminSideBar } from '@/constants/sidebar'
+import { onMounted } from 'vue';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+const { useActions } = createNamespacedHelpers('sidebar'); // specific module name
+const { setSidebar } = useActions(['setSidebar'])
+
+onMounted(() => {
+    setSidebar(AdminSideBar);
+})
+
 </script>
   
